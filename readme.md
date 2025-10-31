@@ -42,3 +42,19 @@ deploy:
 - hexo d  #部署到public文件夹
 - hexo new "post_name" 
 ```
+### mermaid 语法支持
+- next主题原生支持 mermaid 语法，不需要安装任何插件，如有安装hexo-filter-mermaid-diagrams等，需要卸载
+- 主题配置文件 _config.yml
+```yaml
+mermaid:
+  enable: true
+  theme:
+    light: default
+    dark: dark
+```
+- hexo 配置文件 _config.yml ， 告诉Hexo的语法高亮引擎不要处理标记为Mermaid的代码块，避免与Next主题的Mermaid渲染器冲突
+```yaml
+highlight:
+  exclude_languages:
+    - mermaid
+```
