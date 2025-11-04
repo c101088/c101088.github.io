@@ -54,26 +54,19 @@ graph TD
     B --> F[Layer N]
     
     C --> C1[Feature 1]
-    C --> C2[Feature 2]
     C --> C3[...]
     C --> C4[Feature M]
     
     D --> D1[Feature 1]
-    D --> D2[Feature 2]
     D --> D3[...]
     D --> D4[Feature K]
     
     C1 --> C1a[Geometry]
     C1 --> C1b[Attributes]
     
-    C2 --> C2a[Geometry]
-    C2 --> C2b[Attributes]
     
     D1 --> D1a[Geometry]
     D1 --> D1b[Attributes]
-    
-    D2 --> D2a[Geometry]
-    D2 --> D2b[Attributes]
     
     C1a --> C1a1[Point]
     C1a --> C1a2[LineString]
@@ -94,14 +87,6 @@ graph TD
 
 
 
-```mermaid
-graph TD
-A[Hard] -->|Text| B(Round)
-B --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
 **简单来说：**
 
 - QGIS画布可以同时呈现多个矢量图层
@@ -113,7 +98,7 @@ C -->|Two| E[Result 2]
 
 -  iface是qgis.utils模块中的一个特殊变量，代表整个QGIS图形界面的实例。它是我们与QGIS UI界面交互的桥梁。
 
-好的，让我小试牛刀吧！
+好的，让我们小试牛刀吧！
 
 1. mapCanvas() 地图画布
 
@@ -193,5 +178,39 @@ C -->|Two| E[Result 2]
    ##  几何类型: 0, 中心点: <QgsPointXY: POINT(121.46999999999999886 31.23000000000000043)>
    ```
 
-   
 
+## 地图工具
+
+地图工具是用户与QGIS地图进行交互的桥梁，了解和学习QGIS中地图工具的使用对于二次开发大有裨益。iface通过触发界面的action实现工具间的切换。
+
+| 主类别       | 子类别   | 工具名称      | 功能描述           | 对应 iface 方法                           |
+| :----------- | :------- | :------------ | :----------------- | :---------------------------------------- |
+| **导航工具** | 缩放工具 | 缩放至选择    | 缩放至选中要素范围 | `iface.actionZoomToSelected().trigger()`  |
+|              |          | 缩放至图层    | 缩放至活动图层范围 | `iface.zoomToActiveLayer()`               |
+|              |          | 放大/缩小     | 按比例缩放地图     | `iface.actionZoomIn().trigger()`          |
+|              | 平移工具 | 平移地图      | 拖动地图移动视图   | `iface.actionPan().trigger()`             |
+| **选择工具** | 几何选择 | 矩形选择      | 矩形框选要素       | `iface.actionSelectRectangle().trigger()` |
+|              |          | 多边形选择    | 多边形框选要素     | `iface.actionSelectPolygon().trigger()`   |
+|              |          | 自由手绘选择  | 手绘形状选择       | `iface.actionSelectFreehand().trigger()`  |
+|              |          | 半径选择      | 圆形区域选择       | `iface.actionSelectRadius().trigger()`    |
+| **测量工具** | 空间量测 | 距离测量      | 测量线段长度       | `iface.actionMeasure().trigger()`         |
+|              |          | 面积测量      | 测量多边形面积     | `iface.actionMeasureArea().trigger()`     |
+| **识别工具** | 属性查询 | 要素识别      | 点击查看要素属性   | `iface.actionIdentify().trigger()`        |
+| **编辑工具** | 编辑会话 | 开始编辑      | 进入编辑模式       | `iface.actionToggleEditing().trigger()`   |
+|              |          | 保存编辑      | 保存修改内容       | `iface.actionSaveEdits().trigger()`       |
+|              |          | 取消编辑      | 放弃所有修改       | `iface.actionCancelEdits().trigger()`     |
+|              | 要素操作 | 添加要素      | 创建新要素         | `iface.actionAddFeature().trigger()`      |
+|              |          | 删除要素      | 移除选中要素       | `iface.actionDeleteSelected().trigger()`  |
+|              |          | 移动要素      | 移动要素位置       | `iface.actionMoveFeature().trigger()`     |
+|              | 几何编辑 | 节点工具      | 编辑要素顶点       | `iface.actionVertexTool().trigger()`      |
+|              |          | 简化要素      | 简化要素几何       | `iface.actionSimplifyFeature().trigger()` |
+|              |          | 合并要素      | 合并多个要素       | `iface.actionMergeFeatures().trigger()`   |
+|              |          | 分割要素      | 分割要素几何       | `iface.actionSplitFeatures().trigger()`   |
+| **标注工具** | 标注控制 | 显示/隐藏标注 | 切换标注可见性     | `iface.actionShowHideLabels().trigger()`  |
+|              |          | 移动标注      | 调整标注位置       | `iface.actionMoveLabel().trigger()`       |
+|              |          | 旋转标注      | 旋转标注角度       | `iface.actionRotateLabel().trigger()`     |
+|              |          | 标注属性      | 设置标注样式       | 通过图层属性设置                          |
+| **高级工具** | 书签管理 | 空间书签      | 保存/恢复视图位置  | `iface.actionBookmarks().trigger()`       |
+|              | 交互工具 | 地图提示      | 悬停显示属性       | `iface.actionMapTips().trigger()`         |
+|              | 高级选择 | 按位置选择    | 基于空间关系选择   | 通过选择菜单访问                          |
+|              |          | 按表达式选择  | 使用SQL表达式选择  | 通过属性表访问                            |
