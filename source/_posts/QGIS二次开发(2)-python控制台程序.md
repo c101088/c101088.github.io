@@ -1,5 +1,5 @@
 ---
-title: QGIS二次开发(2)-准备与入门
+title: QGIS二次开发(2)-python控制台程序
 date: 2025-10-23 13:34:37
 tags:
   - GIS
@@ -181,36 +181,113 @@ graph TD
 
 ## 地图工具
 
-地图工具是用户与QGIS地图进行交互的桥梁，了解和学习QGIS中地图工具的使用对于二次开发大有裨益。iface通过触发界面的action实现工具间的切换。
+地图工具是用户与QGIS地图进行交互的主要方式，了解和学习QGIS中地图工具的使用对于二次开发大有裨益。
 
-| 主类别       | 子类别   | 工具名称      | 功能描述           | 对应 iface 方法                           |
-| :----------- | :------- | :------------ | :----------------- | :---------------------------------------- |
-| **导航工具** | 缩放工具 | 缩放至选择    | 缩放至选中要素范围 | `iface.actionZoomToSelected().trigger()`  |
-|              |          | 缩放至图层    | 缩放至活动图层范围 | `iface.zoomToActiveLayer()`               |
-|              |          | 放大/缩小     | 按比例缩放地图     | `iface.actionZoomIn().trigger()`          |
-|              | 平移工具 | 平移地图      | 拖动地图移动视图   | `iface.actionPan().trigger()`             |
-| **选择工具** | 几何选择 | 矩形选择      | 矩形框选要素       | `iface.actionSelectRectangle().trigger()` |
-|              |          | 多边形选择    | 多边形框选要素     | `iface.actionSelectPolygon().trigger()`   |
-|              |          | 自由手绘选择  | 手绘形状选择       | `iface.actionSelectFreehand().trigger()`  |
-|              |          | 半径选择      | 圆形区域选择       | `iface.actionSelectRadius().trigger()`    |
-| **测量工具** | 空间量测 | 距离测量      | 测量线段长度       | `iface.actionMeasure().trigger()`         |
-|              |          | 面积测量      | 测量多边形面积     | `iface.actionMeasureArea().trigger()`     |
-| **识别工具** | 属性查询 | 要素识别      | 点击查看要素属性   | `iface.actionIdentify().trigger()`        |
-| **编辑工具** | 编辑会话 | 开始编辑      | 进入编辑模式       | `iface.actionToggleEditing().trigger()`   |
-|              |          | 保存编辑      | 保存修改内容       | `iface.actionSaveEdits().trigger()`       |
-|              |          | 取消编辑      | 放弃所有修改       | `iface.actionCancelEdits().trigger()`     |
-|              | 要素操作 | 添加要素      | 创建新要素         | `iface.actionAddFeature().trigger()`      |
-|              |          | 删除要素      | 移除选中要素       | `iface.actionDeleteSelected().trigger()`  |
-|              |          | 移动要素      | 移动要素位置       | `iface.actionMoveFeature().trigger()`     |
-|              | 几何编辑 | 节点工具      | 编辑要素顶点       | `iface.actionVertexTool().trigger()`      |
-|              |          | 简化要素      | 简化要素几何       | `iface.actionSimplifyFeature().trigger()` |
-|              |          | 合并要素      | 合并多个要素       | `iface.actionMergeFeatures().trigger()`   |
-|              |          | 分割要素      | 分割要素几何       | `iface.actionSplitFeatures().trigger()`   |
-| **标注工具** | 标注控制 | 显示/隐藏标注 | 切换标注可见性     | `iface.actionShowHideLabels().trigger()`  |
-|              |          | 移动标注      | 调整标注位置       | `iface.actionMoveLabel().trigger()`       |
-|              |          | 旋转标注      | 旋转标注角度       | `iface.actionRotateLabel().trigger()`     |
-|              |          | 标注属性      | 设置标注样式       | 通过图层属性设置                          |
-| **高级工具** | 书签管理 | 空间书签      | 保存/恢复视图位置  | `iface.actionBookmarks().trigger()`       |
-|              | 交互工具 | 地图提示      | 悬停显示属性       | `iface.actionMapTips().trigger()`         |
-|              | 高级选择 | 按位置选择    | 基于空间关系选择   | 通过选择菜单访问                          |
-|              |          | 按表达式选择  | 使用SQL表达式选择  | 通过属性表访问                            |
+### iface通过触发界面的action实现工具间的切换
+
+| 主类别       | 子类别   | 工具名称     | 功能描述           | 对应 iface 方法                           |
+| :----------- | :------- | :----------- | :----------------- | :---------------------------------------- |
+| **导航工具** | 缩放工具 | 缩放至选择   | 缩放至选中要素范围 | `iface.actionZoomToSelected().trigger()`  |
+|              |          | 缩放至图层   | 缩放至活动图层范围 | `iface.zoomToActiveLayer()`               |
+|              |          | 放大/缩小    | 按比例缩放地图     | `iface.actionZoomIn().trigger()`          |
+|              | 平移工具 | 平移地图     | 拖动地图移动视图   | `iface.actionPan().trigger()`             |
+| **选择工具** | 几何选择 | 矩形选择     | 矩形框选要素       | `iface.actionSelectRectangle().trigger()` |
+|              |          | 多边形选择   | 多边形框选要素     | `iface.actionSelectPolygon().trigger()`   |
+|              |          | 自由手绘选择 | 手绘形状选择       | `iface.actionSelectFreehand().trigger()`  |
+|              |          | 半径选择     | 圆形区域选择       | `iface.actionSelectRadius().trigger()`    |
+| **测量工具** | 空间量测 | 距离测量     | 测量线段长度       | `iface.actionMeasure().trigger()`         |
+|              |          | 面积测量     | 测量多边形面积     | `iface.actionMeasureArea().trigger()`     |
+| **识别工具** | 属性查询 | 要素识别     | 点击查看要素属性   | `iface.actionIdentify().trigger()`        |
+| **编辑工具** | 编辑会话 | 开始编辑     | 进入编辑模式       | `iface.actionToggleEditing().trigger()`   |
+|              |          | 保存编辑     | 保存修改内容       | `iface.actionSaveEdits().trigger()`       |
+|              |          | 取消编辑     | 放弃所有修改       | `iface.actionCancelEdits().trigger()`     |
+|              | 要素操作 | 添加要素     | 创建新要素         | `iface.actionAddFeature().trigger()`      |
+|              |          | 删除要素     | 移除选中要素       | `iface.actionDeleteSelected().trigger()`  |
+|              |          | 移动要素     | 移动要素位置       | `iface.actionMoveFeature().trigger()`     |
+|              | 几何编辑 | 节点工具     | 编辑要素顶点       | `iface.actionVertexTool().trigger()`      |
+|              |          | 简化要素     | 简化要素几何       | `iface.actionSimplifyFeature().trigger()` |
+|              |          | 分割要素     | 分割要素几何       | `iface.actionSplitFeatures().trigger()`   |
+
+### 地图工具的底层结构
+
+```mermaid
+classDiagram
+    %% 核心抽象基类
+    class QgsMapTool {
+        <<abstract>>
+        #QgsMapCanvas* mCanvas
+        +canvasMoveEvent(QgsMapMouseEvent* e)
+        +canvasPressEvent(QgsMapMouseEvent* e)
+        +canvasReleaseEvent(QgsMapMouseEvent* e)
+        +keyPressEvent(QKeyEvent* e)
+        +activate()
+        +deactivate()
+        +setCursor(QCursor cursor)
+    }
+
+   class QgsMeasureTool {
+        +canvasPressEvent(...)
+        +canvasMoveEvent(...)
+        +canvasReleaseEvent(...)
+    }
+ 	QgsMapTool <|-- QgsMeasureTool
+
+    %% 基本交互工具
+    class QgsMapToolPan {
+        +canvasPressEvent(...)
+        +canvasMoveEvent(...)
+        +canvasReleaseEvent(...)
+    }
+    QgsMapTool <|-- QgsMapToolPan
+
+    class QgsMapToolZoom {
+        +canvasPressEvent(...)
+        +canvasMoveEvent(...)
+        +canvasReleaseEvent(...)
+    }
+    QgsMapTool <|-- QgsMapToolZoom
+    
+    class QgsMapToolIdentify {
+        +canvasReleaseEvent(...)
+    }
+    QgsMapTool <|-- QgsMapToolIdentify
+
+    class QgsMapToolZoom {
+        +canvasReleaseEvent(...)
+    }
+    QgsMapTool <|-- QgsMapToolZoom
+
+    %% 要素选择工具
+    class QgsMapToolSelect {
+        +canvasReleaseEvent(...)
+    }
+    QgsMapTool <|-- QgsMapToolSelect
+
+    %% 基础编辑工具
+
+    class QgsMapToolEdit {
+        <<abstract>>
+        +cadDockManage()
+        +currentVectorLayer()
+    }
+    QgsMapTool <|-- QgsMapToolEdit
+
+
+```
+
+- 所有的地图工具均继承自QgsMapTool
+- 根据需要可以编写自己的地图工具
+
+## 简单案例1
+
+在此处我们实现一个简单案例。假设存在一个多边形图层和一个点图层。现在需要自定义一个选择工具，在选中多边形后，自动将多边形范围内的点标识为选中状态。
+
+案例的最终实现请参考  https://github.com/c101088/QGIS_Example.git 中的example1.py
+
+实现效果如下：
+
+![2-example1](..\images\QGIS\2-example1.png)
+
+## 总结
+
+好的，至此我们已经对QGIS的python控制台程序有了基本的认知。本小节的内容非常的简略，走马观花式的了解python控制的基础功能。之后的章节会深入的讲解QGIS的各种概念、设计逻辑以及程序实现。掌握这些知识之后，参考官方手册再来写控制台程序，就会得心应手。
