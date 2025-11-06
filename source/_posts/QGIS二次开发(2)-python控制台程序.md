@@ -1,6 +1,6 @@
 ---
 title: QGIS二次开发(2)-python控制台程序
-date: 2025-10-23 13:34:37
+date: 2025-10-27 13:34:37
 tags:
   - GIS
   - QT
@@ -286,8 +286,12 @@ classDiagram
 
 实现效果如下：
 
-![2-example1](..\images\QGIS\2-example1.png)
+![2-example1](../images/QGIS/2-example1.png)
 
 ## 总结
 
 好的，至此我们已经对QGIS的python控制台程序有了基本的认知。本小节的内容非常的简略，走马观花式的了解python控制的基础功能。之后的章节会深入的讲解QGIS的各种概念、设计逻辑以及程序实现。掌握这些知识之后，参考官方手册再来写控制台程序，就会得心应手。
+
+如果你觉得有所帮助，不妨为我买杯咖啡吧。
+
+![alipay](../images/alipay.png)
