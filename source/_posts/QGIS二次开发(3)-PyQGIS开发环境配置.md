@@ -19,26 +19,26 @@ categories:
 
 # 配置步骤
 
-1. 新建python项目，选择python解释器为：{OSGeo4W_root}/bin/python-qgis-ltr.bat 。  {OSGeo4W_root}代表OSGeo4W的根路径。
+1. 新建python项目，选择python解释器为：`{OSGeo4W_root}/bin/python-qgis-ltr.bat` 。`{OSGeo4W_root}`代表OSGeo4W的根路径。
 
    ![3-python_env](../images/QGIS/3-python_env.png)
 
 2. 配置Pyqt开发需要的额外工具，主要是DESIGNER UIC  RCC三个工具。为了方便使用，在Pycharm中以 External Tool 的形式引入。
 
    - QTDesigner:  QT界面设计工具
-     - Working directory:  \$FileDir\$
+     - Working directory:  `\$FileDir\$`
 
    ![3-qt_designer](../images/QGIS/3-qt_designer.png)
 
    - UIC：  QT 界面编译工具
-     - Working directory:  \$FileDir\$
+     - Working directory:   `\$FileDir\$`
      - Arguments:    -m PyQt5.uic.pyuic \$FileName\$ -o \$FileNameWithoutExtension\$.py
 
    ![3-qt_UIC](../images/QGIS/3-qt_UIC.png)
 
    - RCC ： QT 资源编译工具
 
-     - Working directory:  \$FileDir\$
+     - Working directory:  `\$FileDir\$`
 
      - Arguments:    -m PyQt5.pyrcc_main \$FileName\$ -o \$FileNameWithoutExtension\$_rc.py
 
